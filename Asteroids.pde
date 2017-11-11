@@ -11,11 +11,19 @@ void setup(){
   noStroke();
   fill(255);
   ship = new Ship();
-  cam = new Camera(this,ship.pos.x,ship.pos.y-100,ship.pos.z+600,ship.pos.x,ship.pos.y,ship.pos.z);
+  cam = new Camera(this,ship.pos.x,ship.pos.y-100,ship.pos.z-600,ship.pos.x,ship.pos.y,ship.pos.z);
   ast = new Asteroid[5];
   for(int i=0;i<5;i++){
     ast[i] = new Asteroid();
   }
+}
+
+void updateCamera(){
+  PVector camPos = ship.pos;
+  PVector offset = new PVector(-sin(ship.dir.y),0,-cos(ship.dir.y));
+  camPos.add(offset);
+  cam.jump(camPos.x,camPos.y-100,camPos.z+600);
+  cam.aim(ship.pos.x,ship.pos.y,ship.pos.z);
 }
 
 void keyPressed(){
@@ -23,12 +31,12 @@ void keyPressed(){
 }
 
 void draw(){
+  cam.feed();
   background(0);
   lights();
   ship.show();
-  //cam.track(ship.pos.x,ship.pos.y);
+  updateCamera();
   for(Asteroid a : ast){
     a.show();
   }
-  cam.feed();
 }
