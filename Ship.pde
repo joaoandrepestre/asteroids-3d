@@ -6,7 +6,7 @@ class Ship{
   PVector dir;
   
   public Ship(){
-    pos = new PVector(width/2,height/2,0);
+    pos = new PVector();
     vel = new PVector();
     acc = new PVector();
     dir = new PVector();
@@ -16,31 +16,25 @@ class Ship{
   
   public void keyPressed(){
     if(key == ' '){
-      PVector thrust = new PVector(0,0,-1);
-      thrust.add(dir);
+      PVector thrust = new PVector(-sin(dir.y),0,-cos(dir.y));
       acc.add(thrust);
     }
     if(key == 'w' || key == 'W'){
-      PVector steer = new PVector(0,-1,0);
-      dir.add(steer);
+      dir.x+=PI/10;
     }
     if(key == 'a' || key == 'A'){
-      PVector steer = new PVector(-1,0,0);
-      dir.add(steer);
+      dir.y+=PI/4;
     }
     if(key == 's' || key == 'S'){
-      PVector steer = new PVector(0,1,0);
-      dir.add(steer);
+      dir.x-=PI/4;
     }
     if(key == 'd' || key == 'D'){
-      PVector steer = new PVector(1,0,0);
-      dir.add(steer);
+      dir.y-=PI/4;
     }
   }
   
   public void update(){
     vel.add(acc);
-    vel.rotate(dir.heading());
     pos.add(vel);
     acc.mult(0);
   }
@@ -49,8 +43,8 @@ class Ship{
     update();
     pushMatrix();
     translate(pos.x,pos.y,pos.z);
-    rotateX(-dir.y);
-    rotateY(-dir.x);
+    rotateX(dir.x);
+    rotateY(dir.y);
     rotateZ(dir.z);
     box(width/12,height/12,width/8);
     popMatrix();
